@@ -1,9 +1,8 @@
 [config]
 model = "deepseek-v4-flash"
 custom_model_api_base = "https://token.cvte.com/v1"
-
-[config.custom_model_max_tokens]
-default = 10000
+custom_model_max_tokens = 10000
+fallback_models = ["deepseek-v4-flash"]
 
 [pr_reviewer]
 security_focus = true
