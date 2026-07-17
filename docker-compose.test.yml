@@ -1,8 +1,18 @@
 services:
   sut:
     build: ./test/smoke/
-    links:
+    depends_on:
       - app
   app:
-    image: bkimminich/juice-shop:latest
+    image: bkimminich/juice-shop:19.0.0
     build: ./
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
