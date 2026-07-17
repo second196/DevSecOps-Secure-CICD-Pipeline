@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         WORKDIR = "${WORKSPACE}/app"
-        DEFECTDOJO_URL = "http://host.docker.internal:8082"
+        DEFECTDOJO_URL = "https://host.docker.internal:8082"
         DEFECTDOJO_API_KEY = credentials('defectdojo_api_token')
         DEFECTDOJO_PRODUCT_NAME = "OWASP Juice Shop Pipeline"
     }
@@ -90,7 +90,7 @@ pipeline {
                 echo "🚀 Starting Juice Shop container..."
                 sh '''
                 docker rm -f juice-shop || true
-                docker run -d -p 3000:3000 --name juice-shop bkimminich/juice-shop
+                docker run -d -p 3000:3000 --memory=512m --cpus=1 --name juice-shop bkimminich/juice-shop
                 sleep 15
                 '''
             }
