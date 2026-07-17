@@ -1,8 +1,8 @@
 [config]
-model = "openai/gpt-5.5"
+model = "gpt-4o"
 custom_model_api_base = "https://token.cvte.com/v1"
 custom_model_max_tokens = 10000
-fallback_models = ["openai/gpt-5.5"]
+fallback_models = ["gpt-4o"]
 
 [pr_reviewer]
 security_focus = true
