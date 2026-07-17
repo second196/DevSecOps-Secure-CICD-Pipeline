@@ -1,0 +1,26 @@
+# 指定扫描框架
+framework:
+  - dockerfile
+  - kubernetes
+  - terraform
+
+# 跳过指定检查
+skip-check:
+  - CKV_DOCKER_11    # From Alias unique（测试项目可跳过）
+  - CKV_DOCKER_5     # update 指令
+  - CKV_K8S_22       # 默认 namespace
+
+# 只运行指定检查（白名单模式）
+# check:
+#   - CKV_DOCKER_2
+#   - CKV_DOCKER_3
+
+# 排除目录
+skip-path:
+  - test
+  - fixtures
+  - vendor
+  - node_modules
+  - .git
+  - test/smoke/Dockerfile
+

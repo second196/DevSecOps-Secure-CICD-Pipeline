@@ -1,0 +1,41 @@
+# 扫描器选择
+scanners:
+  - vuln       # 漏洞扫描
+  - misconfig  # 错误配置
+  - secret     # 密钥扫描
+  - license    # 许可证
+
+# 严重级别过滤
+severity:
+  - HIGH
+  - CRITICAL
+
+# 忽略已无修复的漏洞
+ignore-unfixed: true
+
+# 输出格式
+format: json
+output: trivy-report.json
+
+# 跳过的目录
+skip-dirs:
+  - node_modules
+  - vendor
+  - testdata
+  - tests
+  - .git
+  - __pycache__
+
+# 跳过的文件模式
+skip-files:
+  - "**/*.lock"
+  - "**/go.sum"
+
+# 镜像扫描时的平台
+platform: linux/amd64
+
+# 并发数
+parallel: 5
+
+# 超时设置
+timeout: 10m0s

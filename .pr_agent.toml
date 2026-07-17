@@ -1,0 +1,65 @@
+[config]
+model = "deepseek-v4-flash"
+custom_model_api_base = "https://token.cvte.com/v1"
+
+[config.custom_model_max_tokens]
+default = 10000
+
+[pr_reviewer]
+security_focus = true
+require_security_review = true
+require_tests_review = false
+require_estimate_effort_to_review = true
+num_code_suggestions = 5
+
+extra_instructions = """
+安全审查必须覆盖以下四大维度：
+
+一、密钥泄露检测
+- 硬编码的 API Key、Secret、Token、Password
+- 私钥文件（RSA/SSH/PGP）意外提交
+- 数据库连接字符串、AWS Access Key、JWT Secret
+- .env 文件或配置文件中的敏感凭据
+- Git 历史中的密钥残留（如被 force push 覆盖但仍可追溯的）
+
+二、静态代码安全分析（
+- SQL 注入（字符串拼接 SQL、未使用参数化查询）
+- XSS（未转义的用户输入直接渲染到页面）
+- 命令注入（未过滤的用户输入传入 exec/system/shell）
+- 路径遍历（用户可控的文件路径未做规范化校验）
+- SSRF（用户可控的 URL 未做白名单校验）
+- 不安全的反序列化（eval、pickle、yaml.load 等）
+- 不安全的加密实现（MD5/SHA1 用于密码、ECB 模式、硬编码 IV）
+- 认证/授权缺陷（JWT 未校验签名、缺少权限检查）
+- 敏感信息写入日志（密码、token、PII 打入日志）
+- 不安全的正则表达式（ReDoS）
+
+三、依赖与容器安全
+- package.json / lock 文件中的已知漏洞依赖
+- Dockerfile 中使用 latest 标签或不安全的基础镜像
+- Dockerfile 中以 root 用户运行应用
+- docker-compose.yml 中的不安全配置（privileged、host network 等）
+- 容器镜像中包含不必要的工具（curl、wget、nc 等可用于提权）
+- 未固定的依赖版本（使用 ^ 或 ~ 而非精确版本）
+
+四、基础设施即代码安全
+- IaC 文件（Terraform/CloudFormation/K8s YAML）中的安全配置缺失
+- Kubernetes manifest 中未设置 securityContext（runAsNonRoot、readOnlyRootFilesystem）
+- 暴露的端口或服务（0.0.0.0 绑定、未限制的 Ingress）
+- 未加密的数据存储（明文存储 secrets、未启用 TLS）
+- 缺少资源限制（CPU/Memory limits 未设置）
+- Jenkinsfile / CI 流水线中的不安全操作（script 注入、未校验输入）
+"""
+
+[pr_description]
+enable_semantic_files_types = true
+enable_pr_type = true
+
+[pr_code_suggestions]
+num_code_suggestions = 5
+extra_instructions = """
+代码改进建议必须附带：
+1. 对应的安全风险等级（Critical / High / Medium / Low）
+2. 属于哪个安全检测维度（密钥泄露 / SCA / SAST / IaC）
+3. 修复示例代码
+"""
